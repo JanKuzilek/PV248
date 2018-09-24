@@ -1,55 +1,58 @@
 import sys
 import re
 
-authorsDictionary = {}
+composersDictionary = {}
 centuriesDictionary = {}
 file = sys.argv[1]
 
 if(sys.argv[2] == 'composer'):
-	r = re.compile(r"Composer: (.+)")
+	rComposer = re.compile(r"Composer: (.+)")
+	
 	for line in open(file, 'r', encoding = "utf-8"):
-		m = r.match(line)
-		if(m is None):
+		mComposer = rComposer.match(line)
+		if(mComposer is None):
 			continue
 
-		authors = m.group(1).split(';')
+		composers = mComposer.group(1).split(';')
 
-		for author in authors:
+		for composer in composers:
 			rBrackets = re.compile(r'\((.*)\)')
-			mBrackets = rBrackets.search(author)
+			mBrackets = rBrackets.search(composer)
 			if(mBrackets):
+				# to avoid removing names of authors in brackets
 				if("-" in mBrackets.group(1)):
-					author = author.replace("(" + mBrackets.group(1) + ")",'')
+					composer = composer.replace("(" + mBrackets.group(1) + ")",'')
 			
-			author = author.strip()
+			composer = composer.strip()
 
-			if(author in authorsDictionary.keys()):
-				authorsDictionary[author] = authorsDictionary[author] + 1
+			if(composer in composersDictionary.keys()):
+				composersDictionary[composer] = composersDictionary[composer] + 1
 			else:
-				authorsDictionary[author] = 1
+				composersDictionary[composer] = 1
 
-	for key, value in authorsDictionary.items():
-		if(value > 0):
-			print(str(key) + ": " + str(value))
+	for key, value in composersDictionary.items():
+		print(str(key) + ": " + str(value))
 
 elif(sys.argv[2] == 'century'):
-	r = re.compile(r"Composition Year: (..+)")
+	rComposed = re.compile(r"Composition Year: (..+)")
+	
 	for line in open(file, 'r', encoding = "utf-8"):
-		m = r.match(line)
-		if(m is None):
+		mComposed = rComposed.match(line)
+		if(mComposed is None):
 			continue
 		
+		composed = str(mComposed.group(1))
 		year = 0
-		if('century' in m.group(1)):
-			year = 	re.findall(r'\d{2}', str(m.group(1)))
-			if len(year) > 0:
-				finalYear = str(int(year[0]) * 100 - 1) 
-		else:
-			year = re.findall(r'\d{4}', str(m.group(1)))
-			if len(year) > 0:
-				finalYear = year[0]
+		century = 0
 
-		century = (int(float(finalYear .strip())) // 100) + 1
+		if('century' in composed):
+			century = int(re.findall(r'\d{2}', composed)[0])
+		else:
+			year = int(re.findall(r'\d{4}', composed)[0])
+			if(year % 100 == 0):
+				century = year // 100
+			else:
+				century = year // 100 + 1
 
 		if(century in centuriesDictionary.keys()):
 			centuriesDictionary[century] = centuriesDictionary[century] + 1
@@ -57,4 +60,4 @@ elif(sys.argv[2] == 'century'):
 			centuriesDictionary[century] = 1
 
 	for key, value in centuriesDictionary.items():
-		print(str(key) + ": " + str(value))
+		print(str(key) + "th century: " + str(value))
