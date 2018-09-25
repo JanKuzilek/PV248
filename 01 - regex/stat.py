@@ -16,12 +16,10 @@ if(sys.argv[2] == 'composer'):
 		composers = mComposer.group(1).split(';')
 
 		for composer in composers:
-			rBrackets = re.compile(r'\((.*)\)')
+			rBrackets = re.compile(r'\((.*\d.*)\)')
 			mBrackets = rBrackets.search(composer)
 			if(mBrackets):
-				# to avoid removing names of authors in brackets
-				if("-" in mBrackets.group(1)):
-					composer = composer.replace("(" + mBrackets.group(1) + ")",'')
+				composer = composer.replace("(" + mBrackets.group(1) + ")",'')
 			
 			composer = composer.strip()
 
