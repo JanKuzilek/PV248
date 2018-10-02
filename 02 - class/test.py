@@ -1,6 +1,7 @@
 import sys
 import re
 import scorelib
+#sys.stdout = open('./output.txt','a',  encoding = "utf-8")
 
 file = sys.argv[1]
 
@@ -89,15 +90,19 @@ def processRecord(record):
 			for composerString in value.split(";"):
 				composers.append(createPerson(composerString.strip()))
 		if("Title" in element):
-			title = value
+			if(value != None and value.strip() != ""):
+				title = value
 		if("Genre" in element):
-			genre = value
+			if(value != None and value.strip() != ""):
+				genre = value
 		if("Key" in element):
-			key = value
+			if(value != None and value.strip() != ""):
+				key = value
 		if("Composition" in element):
 			compositionYear = separateYear(value)
 		if("Edition" in element):
-			editionName = value
+			if(value != None and value.strip() != ""):
+				editionName = value
 		if("Editor" in element):
 			for editorString in value.split(";"):
 				editors.append(createPerson(editorString.strip()))
@@ -105,8 +110,10 @@ def processRecord(record):
 			voices.append(createVoice(value))
 		if("Partiture" in element):
 			partiture = getPartiture(value)
-		if("Incipit" in element and incipit == None):				
-			incipit = value
+		if("Incipit" in element and incipit == None):
+			if(value != None and value.strip() != ""):
+				incipit = value
+				
 	composition = scorelib.Composition(title, incipit, key, genre, compositionYear, voices, composers)
 	edition = scorelib.Edition(editionName, composition, editors)
 	printRecord = scorelib.Print(edition, print_id, partiture)
@@ -121,13 +128,14 @@ def load(filename):
 		if(line != '\n'):
 			record.append(line)
 		else:
-			if(len(record) == 0):
-				continue
-			listOfPrints.append(processRecord(record))
-			record = []
+			if(len(record) != 0):
+				listOfPrints.append(processRecord(record))
+				record = []
 	
 	listOfPrints.append(processRecord(record))
 	return listOfPrints
 
 for item in load(file):
 	item.format()
+	print("")
+	
