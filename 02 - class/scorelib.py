@@ -23,13 +23,14 @@ class Voice:
 		
 	def toString(self):
 		if(self.range == None and self.name == None):
-			return None
+			return ""
 		elif(self.range == None and self.name != None):
 			return self.name
 		elif(self.range != None and self.name == None):
 			return self.range
 		else:
 			return self.range + ", " + self.name
+			
 class Composition:
 	def __init__(self, name, incipit, key, genre, year, voices, authors):
 		self.name = name
@@ -66,13 +67,12 @@ class Print:
 				composerToPrint = composerToPrint + "; " + composer.toString()
 				
 		firstEditor = True
-		
 		for editor in self.edition.authors:
 			if(firstEditor):
 				editorToPrint = editor.toString()
 				firstEditor = False
 			else:
-				editorToPrint = editorToPrint + "; " + editor.toString()
+				editorToPrint = editorToPrint + ", " + editor.toString()
 
 			
 		print("Print Number: " + str(self.print_id))

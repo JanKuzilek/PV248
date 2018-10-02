@@ -38,7 +38,57 @@ def createPerson(composerString):
 				died = int(findYears[0])
 		
 	return scorelib.Person(name, born, died)
-		
+
+def createEditor(listOfStrings):
+	if(len(listOfStrings) == 0):
+		return scorelib.Person(None, None, None)
+	
+	listOfEditors = []
+	name = None
+	born = None
+	died = None
+	index = 0
+	
+	while index < len(listOfStrings):
+		stringToProcess = ""
+		if(" " in listOfStrings[index].strip()):
+			stringToProcess = listOfStrings[index].strip()
+			name = re.sub(r'\(.*\d.*\)', '', stringToProcess).strip()
+			index = index + 1		
+		elif(index + 1 < len(listOfStrings)):
+			stringToProcess = listOfStrings[index] + "," + listOfStrings[index + 1].strip()
+			name = re.sub(r'\(.*\d.*\)', '', stringToProcess).strip()
+			index = index + 2
+		else:
+			stringToProcess = listOfStrings[index].strip()
+			name = re.sub(r'\(.*\d.*\)', '', stringToProcess).strip()
+			index = index + 1
+			
+		rBrackets = re.compile(r'\((.*\d.*)\)')
+		mBrackets = rBrackets.search(stringToProcess)
+		if(mBrackets != None):
+			findYears = re.findall(r'\d{4}', mBrackets.group(1))
+			
+			if(len(findYears) == 2):
+				born = findYears[0]
+				died = findYears[1]
+			else:
+				rBorn = re.compile( r"(\d{4}-)")
+				rDied = re.compile( r"(-\d{4})")
+				mBorn = rBorn.match(mBrackets.group(1))
+				mDied = rDied.match(mBrackets.group(1))
+				if(mBorn):
+					born = int(findYears[0])
+				elif(mDied):
+					died = int(findYears[0])
+				elif("*" in mBrackets.group(1)):
+					born = int(findYears[0])
+				elif("+" in mBrackets.group(1)):
+					died = int(findYears[0])
+					
+		listOfEditors.append(scorelib.Person(name, born, died))
+	return listOfEditors
+	
 def separateYear(yearString):
 	years = re.findall(r'\d{4}', yearString)
 	if(len(years) > 0):
@@ -104,8 +154,7 @@ def processRecord(record):
 			if(value != None and value.strip() != ""):
 				editionName = value
 		if("Editor" in element):
-			for editorString in value.split(";"):
-				editors.append(createPerson(editorString.strip()))
+			editors = createEditor(value.split(","))
 		if("Voice" in element):
 			voices.append(createVoice(value))
 		if("Partiture" in element):
@@ -138,4 +187,3 @@ def load(filename):
 for item in load(file):
 	item.format()
 	print("")
-	
