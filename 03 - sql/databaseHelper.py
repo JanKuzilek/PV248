@@ -67,8 +67,6 @@ def insertComposition(composition):
 				for controlRowVoice in cur.execute('SELECT * FROM voice WHERE score=?', (row[0],)):
 					listOfVoicesToTest.append((controlRowVoice[1], controlRowVoice[4], controlRowVoice[3]))
 				if(set(listOfVoices) == set(listOfVoicesToTest)):
-					
-					print (row[0])
 					return row[0]
 	
 	cur.execute('INSERT INTO score (name, genre, key, incipit, year) VALUES (?, ?, ?, ?, ?)', (composition.name, composition.genre, composition.key, composition.incipit, composition.year))
