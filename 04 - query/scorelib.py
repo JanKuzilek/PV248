@@ -32,25 +32,25 @@ class Voice:
 			return self.range + ", " + self.name
 			
 class Composition:
-	def __init__(self, name, incipit, key, genre, year, voices, authors):
-		self.name = name
+	def __init__(self, name, incipit, key, genre, voices, authors):
+		self.title = name
 		self.incipit = incipit
 		self.key = key
 		self.genre = genre
-		self.year = year
+		#self.year = year
 		self.voices = voices
-		self.authors = authors
+		self.composer = authors
 		
 class Edition:
 	def __init__(self, name, composition, authors):
-		self.name = name
+		self.edition = name
 		self.composition = composition
-		self.authors = authors
+		self.editor = authors
 		
 class Print:
-	def __init__(self, edition, print_id, partiture):
+	def __init__(self, edition, partiture):
 		self.edition = edition
-		self.print_id = print_id
+		#self.print_id = print_id
 		self.partiture = partiture
 	
 	def format(self):

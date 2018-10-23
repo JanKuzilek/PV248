@@ -33,14 +33,16 @@ def getPrints(listOfPrintIds):
 		for edi in cur:
 			editors.append(scorelib.Person(edi[0], edi[1], edi[2]))
 			
-		composition = scorelib.Composition(rowMain[5], rowMain[6], rowMain[7], rowMain[8], rowMain[9], voices, composers)
+		composition = scorelib.Composition(rowMain[5], rowMain[6], rowMain[7], rowMain[8], voices, composers)
+		setattr(composition, "composition year", rowMain[9])
 		edition = scorelib.Edition(rowMain[3], composition, editors)
 		
 		if(rowMain[1] == "Y" or rowMain[1] == "y"):
 			partiture = True
 		else:
 			partiture = False
-		printInstance = scorelib.Print(edition, rowMain[0], partiture)
+		printInstance = scorelib.Print(edition, partiture)
+		setattr(printInstance, "print number", rowMain[0])
 		prints.append(printInstance)
 	return prints
 
