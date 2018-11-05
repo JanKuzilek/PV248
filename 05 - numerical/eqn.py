@@ -28,7 +28,9 @@ for line in file:
 	nextIsLast = False
 	
 	for part in splittedLine:
-		if(part == "+"):
+		if(part == ""):
+			continue
+		elif(part == "+"):
 			nextValueIsNegative = False
 		elif(part == "-"):
 			nextValueIsNegative = True
