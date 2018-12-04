@@ -7,11 +7,17 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 port_number = int(sys.argv[1])
 upstream = sys.argv[2]
-	
+
+upstreamParts = urllib.parse.urlparse(upstream)
+if not upstreamParts.scheme:
+	newUupstream = 'http://' + upstream
+else:
+	newUupstream = upstream
+
 class myHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		responseForClient = {}
-		request = urllib.request.Request(url = upstream, headers = dict(self.headers))
+		request = urllib.request.Request(url = newUupstream, headers = dict(self.headers))
 		
 		try:
 			response = urllib.request.urlopen(request, timeout=1)
