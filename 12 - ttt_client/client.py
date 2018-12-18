@@ -9,7 +9,6 @@ port_number = int(sys.argv[2])
 
 player = 0
 currentGame = 0
-endClient = False
 
 connection = http.client.HTTPConnection(hostname, port_number)
 
@@ -70,11 +69,6 @@ def UpdateClient():
 			print("you lose")
 		sys.exit(0)
 		
-	#print(str(PrintMark(js["board"][0][0])) + str(PrintMark(js["board"][0][1])) + str(PrintMark(js["board"][0][2])))
-	#print(str(PrintMark(js["board"][1][0])) + str(PrintMark(js["board"][1][1])) + str(PrintMark(js["board"][1][2])))
-	#print(str(PrintMark(js["board"][2][0])) + str(PrintMark(js["board"][2][1])) + str(PrintMark(js["board"][2][2])))
-	
-	
 	print(str(PrintMark(js["board"][0][0])) + str(PrintMark(js["board"][1][0])) + str(PrintMark(js["board"][2][0])))
 	print(str(PrintMark(js["board"][0][1])) + str(PrintMark(js["board"][1][1])) + str(PrintMark(js["board"][2][1])))
 	print(str(PrintMark(js["board"][0][2])) + str(PrintMark(js["board"][1][2])) + str(PrintMark(js["board"][2][2])))
